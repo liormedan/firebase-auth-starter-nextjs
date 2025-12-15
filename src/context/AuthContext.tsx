@@ -37,19 +37,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     const signInWithGoogle = async () => {
-        try {
-            await signInWithPopup(auth, googleProvider);
-        } catch (error) {
-            console.error("Error signing in with Google", error);
-        }
+        await signInWithPopup(auth, googleProvider);
     };
 
     const signInWithGithub = async () => {
-        try {
-            await signInWithPopup(auth, githubProvider);
-        } catch (error) {
-            console.error("Error signing in with GitHub", error);
-        }
+        await signInWithPopup(auth, githubProvider);
     };
 
     const logout = async () => {

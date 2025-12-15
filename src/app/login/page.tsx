@@ -44,6 +44,27 @@ export default function LoginPage() {
         }
     };
 
+    const handleSocialLogin = async (provider: 'google' | 'github') => {
+        setError(null);
+        try {
+            if (provider === 'google') {
+                await signInWithGoogle();
+            } else {
+                await signInWithGithub();
+            }
+            router.push("/dashboard");
+        } catch (err: any) {
+            console.error("Social login error:", err);
+            if (err.code === 'auth/account-exists-with-different-credential') {
+                setError("An account with this email already exists. Please sign in with the provider you used originally (e.g., Google or Email).");
+            } else if (err.code === 'auth/popup-closed-by-user') {
+                setError("Sign-in popup was closed before completion.");
+            } else {
+                setError("Failed to sign in. Please try again.");
+            }
+        }
+    };
+
     return (
         <Container component="main" maxWidth="xs">
             <Box
@@ -101,7 +122,7 @@ export default function LoginPage() {
                         fullWidth
                         variant="outlined"
                         startIcon={<GoogleIcon />}
-                        onClick={signInWithGoogle}
+                        onClick={() => handleSocialLogin('google')}
                         sx={{ mb: 1 }}
                     >
                         Sign in with Google
@@ -110,7 +131,7 @@ export default function LoginPage() {
                         fullWidth
                         variant="outlined"
                         startIcon={<GitHubIcon />}
-                        onClick={signInWithGithub}
+                        onClick={() => handleSocialLogin('github')}
                         sx={{ mb: 2 }}
                     >
                         Sign in with GitHub
